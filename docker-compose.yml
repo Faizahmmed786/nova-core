@@ -1,0 +1,46 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: novacore_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: novacore_db
+      POSTGRES_USER: novacore_user
+      POSTGRES_PASSWORD: novacore_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./novacore_backend/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U novacore_user -d novacore_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./novacore_backend
+      dockerfile: Dockerfile
+    container_name: novacore_backend
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: novacore_db
+      DB_USERNAME: novacore_user
+      DB_PASSWORD: novacore_pass
+      JWT_SECRET: ${JWT_SECRET:-novacore_secret_key_very_long_2024_change_in_prod}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-your-google-client-id.apps.googleusercontent.com}
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+    driver: local
