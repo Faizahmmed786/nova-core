@@ -7,9 +7,9 @@ spring:
   application:
     name: novacore-backend
   datasource:
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:novacore_db}
-    username: ${DB_USERNAME:novacore_user}
-    password: ${DB_PASSWORD:novacore_pass}
+    url: jdbc:postgresql://db.eqyegnerrgjfofcvehxz.supabase.co:5432/postgres?sslmode=require
+    username: postgres
+    password: YHqbfqDLIIAqXzYh
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 20
