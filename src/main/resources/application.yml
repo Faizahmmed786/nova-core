@@ -6,28 +6,36 @@ server:
 spring:
   application:
     name: novacore-backend
+
   datasource:
     url: jdbc:postgresql://db.eqyegnerrgjfofcvehxz.supabase.co:5432/postgres?sslmode=require
     username: postgres
     password: YHqbfqDLIIAqXzYh
     driver-class-name: org.postgresql.Driver
+
     hikari:
       maximum-pool-size: 20
+
   jpa:
     hibernate:
       ddl-auto: update
+
     show-sql: false
+
     properties:
+      hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+
   jackson:
     time-zone: UTC
+
     serialization:
       write-dates-as-timestamps: false
 
 jwt:
   secret: ${JWT_SECRET:novacore_secret_key_very_long_and_secure_2024}
-  access-token-expiration: 900000      # 15 min
-  refresh-token-expiration: 604800000  # 7 days
+  access-token-expiration: 900000
+  refresh-token-expiration: 604800000
 
 google:
   client-id: ${GOOGLE_CLIENT_ID:your-google-client-id.apps.googleusercontent.com}
@@ -37,9 +45,10 @@ app:
     points-per-claim: 40
     claim-interval-hours: 4
     total-daily-slots: 6
-    # Slots: 06:00, 10:00, 14:00, 18:00, 22:00, 02:00
+
   referral:
     register-bonus: 400
     mining-bonus: 100
     per-claim-bonus: 2
+
   frontend-url: ${FRONTEND_URL:http://localhost:3000}
